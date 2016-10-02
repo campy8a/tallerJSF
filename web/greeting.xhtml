@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html">
+    
+    <body>
+        
+        <ui:composition template="./template.xhtml">
+            
+            <ui:define name="title">
+                Greeting
+            </ui:define>
+
+            <ui:define name="box">
+                <h4>Hi, my name is Duke!</h4>
+
+                <h5>I'll help you with your search on your music
+
+                    <br/>
+                    Choose between
+                    <span class="highlight">Artist Name</span> and
+                    <span class="highlight">Disk Name</span>.</h5>
+
+                <h5>Please submit one</h5>
+
+                <h:form>
+                    <h:body>Nombre del Artista</h:body>
+                    <h:inputText size="20" maxlength="37" value="#{UserArtistName.nombre}" />
+                    <h:commandButton id="submit" value="submit" action="response" />
+                </h:form>
+                
+                <h:form>
+                    <h:body>Nombre del Disco</h:body>
+                    <h:inputText size="20" maxlength="37" value="#{UserDiskName.nombre}" />
+                    <h:commandButton id="sendDiskName" value="submit" action="response" />    
+                </h:form>
+                
+            </ui:define>
+
+        </ui:composition>
+        
+    </body>
+</html>
