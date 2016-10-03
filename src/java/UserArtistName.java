@@ -77,7 +77,7 @@ public class UserArtistName implements Serializable {
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xml)));
             org.w3c.dom.Element rootElement = document.getDocumentElement();
-            requestQueueName = getString("alias", rootElement);
+            requestQueueName = getString("name", rootElement);
             System.out.println(requestQueueName);
           } catch (Exception e) {
             e.printStackTrace();
