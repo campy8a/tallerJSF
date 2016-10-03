@@ -4,25 +4,43 @@
  * and open the template in the editor.
  */
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import java.io.StringReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
+import javax.lang.model.element.Element;
+import javax.swing.text.Document;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.xml.sax.InputSource;
 
 /**
  *
  * @author FCampy
  */
 
-@Named(value = "userArtistName")
+@Named(value = "UserArtistName")
 @SessionScoped
 
 public class UserArtistName implements Serializable {
 
     String nombre;
-     public UserArtistName() 
+    String respuesta;
+
+    public String getRespuesta() {
+        return respuesta;
+    }
+    
+     public UserArtistName() throws MalformedURLException, ProtocolException, IOException 
     {
-     
-        
+      
     }
     public String getNombre() 
     {
@@ -33,8 +51,40 @@ public class UserArtistName implements Serializable {
     {
         this.nombre = nombre;
     }
-    /**
-     * Creates a new instance of UserArtistName
-     */
-   
+    
+    public String getArtists(){
+        
+        String requestQueueName="";
+        try {
+            URL url = new URL("http://musicbrainz.org/ws/2/artist/?query=artist:"+nombre);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            if (conn.getResponseCode() != 200) {
+                throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+            }
+            String xml ="";
+            BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+            String output;
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+  System.out.println(output);
+                xml += output;
+                respuesta=xml;
+            }
+            conn.disconnect();
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xml)));
+            org.w3c.dom.Element rootElement = document.getDocumentElement();
+            requestQueueName = getString("artist", rootElement);
+            System.out.println(requestQueueName);
+          } catch (Exception e) {
+            e.printStackTrace();
+   }
+        return respuesta;
+    }
+
+    private String getString(String artist, org.w3c.dom.Element rootElement) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
