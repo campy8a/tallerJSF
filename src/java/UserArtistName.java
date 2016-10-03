@@ -15,10 +15,11 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import javax.lang.model.element.Element;
+import org.w3c.dom.Element;
 import javax.swing.text.Document;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 /**
@@ -76,7 +77,7 @@ public class UserArtistName implements Serializable {
             DocumentBuilder builder = factory.newDocumentBuilder();
             org.w3c.dom.Document document = builder.parse(new InputSource(new StringReader(xml)));
             org.w3c.dom.Element rootElement = document.getDocumentElement();
-            requestQueueName = getString("artist", rootElement);
+            requestQueueName = getString("alias", rootElement);
             System.out.println(requestQueueName);
           } catch (Exception e) {
             e.printStackTrace();
@@ -84,7 +85,16 @@ public class UserArtistName implements Serializable {
         return respuesta;
     }
 
-    private String getString(String artist, org.w3c.dom.Element rootElement) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      protected String getString(String tagName, Element element) {
+          respuesta="";
+        NodeList list = element.getElementsByTagName(tagName);
+        if (list != null && list.getLength() > 0) {
+            for(int i = 0; i < list.getLength(); i++){
+               
+                respuesta += list.item(i).getFirstChild().getNodeValue()+ "<br>";
+            }
+        }
+        return respuesta;
     }
+    
 }
